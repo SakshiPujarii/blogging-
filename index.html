@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Blog System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster+Two:wght@700&family=Pacifico&family=Righteous&family=Rock+Salt&display=swap" rel="stylesheet">
+<style>
+        body {
+            background-color: #e3b5a4;
+            transition: background-color 1s ease-in-out, opacity 1s ease-in-out;
+            font-family: 'Consolas', monospace;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            flex-flow: row;
+        }
+
+        .column {
+            padding: 10px;
+        }
+
+        .writing-column {
+            border: 3px solid #000;
+            width: 50%;
+            padding: 20px;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px #888888;
+            transition: background-color 0.2s ease-in-out;
+            border-radius: 10px;
+        }
+
+        .writing-column:hover {
+            background-color: #207bbd;
+        }
+
+        .card-column {
+            width: 50%;
+            height: 80vh;
+            overflow-y: auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .blog-card {
+            border: 3px solid #000;
+            ;
+            background-color: #f7f7f7;
+            margin: 10px;
+            padding: 10px;
+            width: 260px;
+            max-height: 200px;
+            min-height: 200px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 2px 2px 5px #888888;
+            transition: transform 0.2s ease-in-out;
+            border-radius: 10px;
+            font-size: 20px;
+            font-weight: bold;
+
+        }
+
+        .blog-card:hover {
+            transform: scale(1.05);
+        }
+
+        .blog-content {
+            max-height: 100px;
+            overflow: hidden;
+        }
+
+        .blog-input {
+            border: 3px solid #000;
+            border-radius: 10px;
+            width: 97%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .blog-input:focus {
+            border: 2px solid #dadada;
+        }
+
+        .button-container {
+            text-align: center;
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+        }
+
+        .button-container button {
+            margin-top: 10px;
+            color: #000;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 15px;
+            /* Adjust padding to create button-like appearance */
+            border-radius: 5px;
+            /* Add rounded corners */
+            background-color: transparent;
+            border: 3px solid #000;
+            ;
+            cursor: pointer;
+            /* Transparent background */
+            transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .button-container button:hover {
+
+            color: #fff;
+            /* Change text color on hover */
+            background-color: #001021;
+            /* Change background color on hover */
+            transform: scale(1.1);
+            /* Add a slight scale effect on hover */
+        }
+
+        .create {
+            margin-top: 10px;
+            color: #000;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            padding: 10px 20px;
+            /* Adjust padding to create button-like appearance */
+            border-radius: 5px;
+            /* Add rounded corners */
+            background-color: transparent;
+            /* Transparent background */
+            transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            border: 3px solid #000;
+            cursor: pointer;
+        }
+
+        .create:hover {
+            color: #fff;
+            background-color: #001021;
+            transform: scale(1.1);
+            /* Add a slight scale effect on hover */
+        }
+
+        .button-container .delete:hover {
+            background-color: red;
+        }
+
+        .button-container .view:hover {
+            background-color: rgb(16, 186, 67);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            font-size: 20px;
+            font-weight: bold;
+
+        }
+
+        .modal-content {
+            background-color: #f7f7f7;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #3498db;
+            width: 70%;
+            max-height: 70%;
+            min-height: 70%;
+            overflow-y: auto;
+            box-shadow: 2px 2px 5px #888888;
+            border-radius: 15px;
+        }
+
+        .modal-content p {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+
+
+        .modal-exit-button {
+            border: 3px solid #000;
+            ;
+            position: absolute;
+            top: 5vh;
+            right: 10vh;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            width: 80px;
+            height: 40px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+        .modal-exit-button:hover {
+            border: 3px solid #000;
+            ;
+            background-color: #207bbd;
+        }
+
+        .recording-animation {
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                background-color: green;
+            }
+            50% {
+                transform: scale(1.1);
+                background-color: orange;
+            }
+            100% {
+                transform: scale(1);
+                background-color: red;
+            }
+        }
+
+        .material-icons {
+            vertical-align: middle;
+        }
+
+        #blog-list{
+            display: flexbox;
+            overflow-y:scroll;
+            scroll-behavior: smooth;
+        }
+    </style>
+
+</head>
+
+<body>
+    <center>
+        <h1 style="color:rgb(0, 0, 0); font-size: 40px;font-family: Rock Salt;margin-top: 5px;margin-bottom: 5px;">Notes</h1>
+    </center>
+    <div class="container">
+        <div class="column writing-column">
+            <h2>Write a New Note</h2>
+            <textarea id="blog-content" class="blog-input" rows="19" cols="50"></textarea>
+            <br>
+            <button style="margin-top: 10px;" class="create" onclick="createBlogPost()">
+                <i class="material-icons">create</i> Create Post
+            </button>
+
+            <!-- New button for voice input with microphone icon -->
+            <button style="margin-top: 10px;" class="create" id="voiceInputButton" onclick="startVoiceInput()">
+                <i class="material-icons">mic</i> Voice Input
+            </button>
+        </div>
+        <div class="column card-column" id="blog-list">
+            <!-- Blog posts will be displayed here -->
+        </div>
+    </div>
+
+    <div id="blogModal" class="modal">
+        <div class="modal-content">
+            <p id="modalContent"></p>
+            <button class="modal-exit-button" onclick="closeModal()">Exit</button>
+        </div>
+    </div>
+
+
+    <script>
+
+function startVoiceInput() {
+            const voiceInputButton = document.getElementById('voiceInputButton');
+            voiceInputButton.classList.add('recording-animation'); // Apply the recording animation
+
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+
+            recognition.onresult = function (event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('blog-content').value = transcript;
+            };
+
+            recognition.onerror = function (event) {
+                alert('Error occurred in speech recognition. Please try again.');
+            };
+
+            recognition.onend = function () {
+                // Optionally, you can add a message or perform other actions when voice input ends.
+                voiceInputButton.classList.remove('recording-animation'); // Remove the recording animation
+            };
+
+            recognition.start();
+        }
+
+
+        let blogPosts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        let modal = document.getElementById('blogModal');
+
+        function saveBlogPosts() {
+            localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+        }
+
+        function createBlogPost() {
+            const content = document.getElementById('blog-content').value;
+            if (content.trim() === '') {
+                alert('Please enter some content for your blog post.');
+                return;
+            }
+
+            const post = { content };
+            blogPosts.push(post);
+            saveBlogPosts();
+            displayBlogPosts();
+        }
+
+        function deleteBlogPost(index) {
+            blogPosts.splice(index, 1);
+            saveBlogPosts();
+            displayBlogPosts();
+        }
+
+        function updateBlogPost(index) {
+            const content = document.getElementById('blog-content');
+            const currentContent = blogPosts[index].content;
+
+            // Set the content of the textarea with the existing content
+            content.value = currentContent;
+
+            // Change the "Create Post" button to an "Update Post" button
+            const createButton = document.querySelector('.create');
+            createButton.innerHTML = `<i class="material-icons">edit</i>Update Post`;
+            createButton.onclick = function () {
+                saveUpdatedBlogPost(index);
+            };
+        }
+
+        function saveUpdatedBlogPost(index) {
+            const content = document.getElementById('blog-content').value;
+            if (content.trim() === '') {
+                alert('Please enter some content for your blog post.');
+                return;
+            }
+
+            blogPosts[index].content = content;
+            saveBlogPosts();
+            displayBlogPosts();
+
+            // Reset the textarea and button after updating
+            document.getElementById('blog-content').value = '';
+            const createButton = document.querySelector('.create');
+            createButton.innerHTML = `<i class="material-icons">create</i>Create Post`;
+            createButton.onclick = createBlogPost;
+        }
+
+
+        function displayBlogPosts() {
+            const blogList = document.getElementById('blog-list');
+            blogList.innerHTML = '';
+
+            blogPosts = blogPosts.filter(post => post.content.trim() !== ''); // Remove empty content posts
+
+            var colors = ["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51","#ef233c", "#73ba9b", "#003e1f", "#d90429", "#ffd60a"];
+
+            blogPosts.forEach((post, index) => {
+                const colorIndex = index % colors.length;
+                const bgColor = colors[colorIndex];
+
+                const blogCard = document.createElement('div');
+                blogCard.className = 'blog-card';
+                blogCard.style.backgroundColor = bgColor;
+                blogCard.style.color = 'white';
+
+                blogCard.innerHTML = `
+                    <div class="blog-content">
+                        <p>${post.content}</p>
+                    </div>
+                    <div class="button-container">
+                        <button onclick="updateBlogPost(${index})"><i class="material-icons">edit</i> Update</button>
+                        <button class="delete" onclick="deleteBlogPost(${index})"><i class="material-icons">delete</i></button>
+                        <button class="view" onclick="openModal(${index})"><i class="material-icons">visibility</i></button>
+                    </div>
+                `;
+                blogList.appendChild(blogCard);
+            });
+
+            document.getElementById('blog-content').value = '';
+        }
+        function openModal(index) {
+            var colors = ["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51","#ef233c", "#73ba9b", "#003e1f", "#d90429", "#ffd60a"];
+                const colorIndex = index % colors.length;
+            const bgColor = colors[colorIndex];
+            const modalContent = document.getElementById('modalContent');
+            modal.style.backgroundColor = bgColor;
+            modalContent.textContent = blogPosts[index].content;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        displayBlogPosts(); // Initial display of blog posts
+
+        // Periodically check for empty content and remove the cards
+        setInterval(() => {
+            displayBlogPosts();
+        }, 30000); // Adjust the interval as needed (e.g., every 30 seconds)
+
+
+        var sections = document.getElementsByTagName("body")
+        var colors = ["#d88c9a", "#f2d0a9", "#f1e3d3", "#99c1b9", "#8e7dbe"];
+        var currentColorIndex = 0;
+        function changeBackgroundColor() {
+            var newColor = colors[currentColorIndex];
+
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].style.backgroundColor = newColor;
+            }
+
+            currentColorIndex = (currentColorIndex + 1) % colors.length;
+        }
+
+        setInterval(changeBackgroundColor, 3000); // Change color every 10 seconds
+    </script>
+</body>
+
+</html>
